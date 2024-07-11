@@ -40,23 +40,3 @@ resource "vault_kv_secret_v2" "ns-1" {
     ]
   }
 }
-
-resource "vault_secrets_sync_aws_destination" "aws" {
-  name                 = "my-account"
-  namespace            = vault_namespace.ns-1.path_fq
-  region               = "eu-north-1"
-  secret_name_template = "vault/{{ .NamespacePath }}{{ .MountPath }}/{{ .SecretPath }}"
-  granularity          = "secret-path"
-  custom_tags = {
-    "ochestrator" = "terraform"
-    "owner" = "jrx"
-  }
-}
-
-resource "vault_secrets_sync_association" "aws-test" {
-  namespace   = vault_namespace.ns-1.path_fq
-  name        = vault_secrets_sync_aws_destination.aws.name
-  type        = vault_secrets_sync_aws_destination.aws.type
-  mount       = vault_mount.ns-1.path
-  secret_name = vault_kv_secret_v2.ns-1.name
-}
