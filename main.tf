@@ -40,3 +40,13 @@ resource "vault_kv_secret_v2" "ns-1" {
     ]
   }
 }
+
+module "aws" {
+  source = "./modules/aws"
+  count  = var.aws ? 1 : 0
+
+  aws_region  = var.aws_region
+  namespace   = vault_namespace.ns-1.path_fq
+  mount       = vault_mount.ns-1.path
+  secret_name = vault_kv_secret_v2.ns-1.name
+}

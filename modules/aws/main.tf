@@ -34,7 +34,7 @@ resource "time_sleep" "wait" {
 
 resource "vault_secrets_sync_aws_destination" "aws" {
   name                 = "my-account"
-  namespace            = vault_namespace.ns-1.path_fq
+  namespace            = var.namespace
   access_key_id        = aws_iam_access_key.vault_mount_user.id
   secret_access_key    = aws_iam_access_key.vault_mount_user.secret
   region               = var.aws_region
@@ -49,9 +49,9 @@ resource "vault_secrets_sync_aws_destination" "aws" {
 }
 
 resource "vault_secrets_sync_association" "aws-test" {
-  namespace   = vault_namespace.ns-1.path_fq
+  namespace   = var.namespace
   name        = vault_secrets_sync_aws_destination.aws.name
   type        = vault_secrets_sync_aws_destination.aws.type
-  mount       = vault_mount.ns-1.path
-  secret_name = vault_kv_secret_v2.ns-1.name
+  mount       = var.mount
+  secret_name = var.secret_name
 }
