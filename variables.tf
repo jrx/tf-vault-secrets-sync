@@ -19,3 +19,9 @@ variable "aws" {
 variable "aws_region" {
   default = "eu-north-1"
 }
+
+variable "gcp" {
+  type        = bool
+  description = "Enable Secrets Sync to GCP"
+  default     = false
+}

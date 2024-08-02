@@ -41,8 +41,8 @@ resource "vault_secrets_sync_aws_destination" "aws" {
   secret_name_template = "vault/{{ .NamespacePath }}{{ .MountPath }}/{{ .SecretPath }}"
   granularity          = "secret-path"
   custom_tags = {
-    "Ochestrator" = "terraform"
-    "Owner"       = "demo-${local.my_email}"
+    "ochestrator" = "terraform"
+    "owner"       = "demo-${local.my_email}"
   }
 
   depends_on = [time_sleep.wait]
