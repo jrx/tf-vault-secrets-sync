@@ -25,3 +25,9 @@ variable "gcp" {
   description = "Enable Secrets Sync to GCP"
   default     = false
 }
+
+variable "azure" {
+  type        = bool
+  description = "Enable Secrets Sync to Azure"
+  default     = false
+}

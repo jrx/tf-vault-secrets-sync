@@ -59,3 +59,12 @@ module "gcp" {
   mount       = vault_mount.ns-1.path
   secret_name = vault_kv_secret_v2.ns-1.name
 }
+
+module "azure" {
+  source = "./modules/azure"
+  count  = var.azure ? 1 : 0
+
+  namespace   = vault_namespace.ns-1.path_fq
+  mount       = vault_mount.ns-1.path
+  secret_name = vault_kv_secret_v2.ns-1.name
+}
