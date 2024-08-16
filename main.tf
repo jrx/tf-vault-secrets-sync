@@ -8,28 +8,23 @@
 # EOT
 # }
 
-resource "vault_namespace" "admin" {
-  path = "admin"
+resource "vault_namespace" "tenant_namespace" {
+  path = var.vault-tenant-namespace
 }
 
-resource "vault_namespace" "ns-1" {
-  namespace = vault_namespace.admin.path
-  path      = var.ns-1
-}
-
-resource "vault_mount" "ns-1" {
-  namespace = vault_namespace.ns-1.path_fq
-  path      = "secret"
+resource "vault_mount" "tenant_mount" {
+  namespace = vault_namespace.tenant_namespace.path_fq
+  path      = var.secret-mount
   type      = "kv"
   options = {
     version = "2"
   }
 }
 
-resource "vault_kv_secret_v2" "ns-1" {
-  namespace = vault_namespace.ns-1.path_fq
-  mount     = vault_mount.ns-1.path
-  name      = "database/dev"
+resource "vault_kv_secret_v2" "tenant_secret" {
+  namespace = vault_namespace.tenant_namespace.path_fq
+  mount     = vault_mount.tenant_mount.path
+  name      = var.secret-path
   data_json = jsonencode(
     {}
   )
@@ -46,25 +41,25 @@ module "aws" {
   count  = var.aws ? 1 : 0
 
   aws_region  = var.aws_region
-  namespace   = vault_namespace.ns-1.path_fq
-  mount       = vault_mount.ns-1.path
-  secret_name = vault_kv_secret_v2.ns-1.name
+  namespace   = vault_namespace.tenant_namespace.path_fq
+  mount       = vault_mount.tenant_mount.path
+  secret_name = vault_kv_secret_v2.tenant_secret.name
 }
 
 module "gcp" {
   source = "./modules/gcp"
   count  = var.gcp ? 1 : 0
 
-  namespace   = vault_namespace.ns-1.path_fq
-  mount       = vault_mount.ns-1.path
-  secret_name = vault_kv_secret_v2.ns-1.name
+  namespace   = vault_namespace.tenant_namespace.path_fq
+  mount       = vault_mount.tenant_mount.path
+  secret_name = vault_kv_secret_v2.tenant_secret.name
 }
 
 module "azure" {
   source = "./modules/azure"
   count  = var.azure ? 1 : 0
 
-  namespace   = vault_namespace.ns-1.path_fq
-  mount       = vault_mount.ns-1.path
-  secret_name = vault_kv_secret_v2.ns-1.name
+  namespace   = vault_namespace.tenant_namespace.path_fq
+  mount       = vault_mount.tenant_mount.path
+  secret_name = vault_kv_secret_v2.tenant_secret.name
 }

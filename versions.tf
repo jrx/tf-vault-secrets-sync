@@ -6,7 +6,9 @@ terraform {
   }
 }
 
-provider "vault" {}
+provider "vault" {
+  namespace = var.vault-parent-namespace
+}
 
 provider "aws" {
   region                      = var.aws_region

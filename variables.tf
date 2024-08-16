@@ -1,12 +1,18 @@
-variable "ns-1" {
+variable "vault-parent-namespace" {
+  type    = string
+  default = ""
+}
+
+variable "vault-tenant-namespace" {
   default = "tenant-1"
 }
 
-variable "ns-2" {
-  default = "tenant-2"
+variable "secret-mount" {
+  type    = string
+  default = "secret"
 }
 
-variable "secret-name" {
+variable "secret-path" {
   default = "database/dev"
 }
 
